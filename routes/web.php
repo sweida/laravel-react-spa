@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Http\Request;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -13,4 +14,12 @@
 
 Route::get('/', function () {
     return view('welcome');
+});
+
+Route::post('/image', function (Request $request) {
+    return Storage::disk('upyun')->put('/', $request->file('image'));
+});
+
+Route::get('/image/delete', function () {
+    Storage::disk('upyun')->delete('lvn9RsRnjS5O6Obm6BEkWOPEdTLCTnGWcCMJn2Ob.jpeg');
 });

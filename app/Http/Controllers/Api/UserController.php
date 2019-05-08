@@ -22,7 +22,7 @@ class UserController extends Controller
     //用户登录
     public function login(LoginRequest $request){
         $token=Auth::guard('api')->attempt(
-            ['username'=>$request->username,'password'=>$request->password]
+            ['name'=>$request->name,'password'=>$request->password]
         );
         if($token){
             return $this->success(['token' => 'bearer ' . $token]);

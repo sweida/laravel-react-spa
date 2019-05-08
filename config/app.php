@@ -164,6 +164,8 @@ return [
 
         // jwt
         Tymon\JWTAuth\Providers\LaravelServiceProvider::class,
+        // 又拍云
+        JellyBool\Flysystem\Upyun\UpyunServiceProvider::class,
         /*
          * Package Service Providers...
          */

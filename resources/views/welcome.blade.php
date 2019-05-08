@@ -84,7 +84,19 @@
                     Laravel
                 </div>
 
-                <div class="links">
+
+                <form enctype="multipart/form-data" method="post" action="/image">
+                    {{csrf_field()}}
+                    <div>
+                        <div class="form-group">
+                            <input name="image" type="file" value="请选择文件">
+                        </div>
+                        <div class="form-group">
+                            <input class="form-control" type="submit" value="上传图片">
+                        </div>
+                    </div>
+                </form>
+                <!-- <div class="links">
                     <a href="https://laravel.com/docs">Docs</a>
                     <a href="https://laracasts.com">Laracasts</a>
                     <a href="https://laravel-news.com">News</a>
@@ -92,7 +104,7 @@
                     <a href="https://nova.laravel.com">Nova</a>
                     <a href="https://forge.laravel.com">Forge</a>
                     <a href="https://github.com/laravel/laravel">GitHub</a>
-                </div>
+                </div> -->
             </div>
         </div>
     </body>

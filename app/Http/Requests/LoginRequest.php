@@ -8,7 +8,7 @@ class LoginRequest extends FormRequest
     {
         return [
             // 'id' => ['exists:shop_user,id'],
-            'username' => ['required', 'exists:users,username'],
+            'name' => ['required', 'exists:users,name'],
             'password' => ['required'],
         ];
     }
@@ -17,8 +17,8 @@ class LoginRequest extends FormRequest
     {
         return [
             // 'id.exists'=>'用户不存在',
-            'username.required'=>'用户名不能为空',
-            'username.exists'=>'用户名不存在',
+            'name.required'=>'用户名不能为空',
+            'name.exists'=>'用户名不存在',
             'password.required' => '密码不能为空',
         ];
     }
