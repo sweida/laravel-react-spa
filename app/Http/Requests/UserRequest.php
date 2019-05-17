@@ -6,12 +6,29 @@ class UserRequest extends FormRequest
 {
     public function rules()
     {
-        return [
-            'name' => ['required', 'max:16', 'unique:users,name'],
-            'email' => ['required', 'unique:users,email'],
-            'password' => ['required', 'max:32', 'min:6'],
-            'phone' => ['unique:users,phone']
-        ];
+        switch ($this->method()) {
+            case 'GET':
+                {
+                    return [
+                        'id' => ['required', 'exists:users,id']
+                    ];
+                }
+            case 'POST':
+                {
+                    return [
+                        'name' => ['required', 'max:16', 'unique:users,name'],
+                        'email' => ['required', 'unique:users,email'],
+                        'password' => ['required', 'max:32', 'min:6'],
+                        'phone' => ['unique:users,phone']
+                    ];
+                }
+            default:
+                {
+                    return [
+
+                    ];
+                }
+        }
     }
 
     public function messages()
@@ -26,6 +43,8 @@ class UserRequest extends FormRequest
             'password.required' => '密码不能为空',
             'password.max' => '密码长度不能超过32个字符',
             'password.min' => '密码长度不能少于6个字符', 
+            'id.required'=>'id必须填写',
+            'id.exists' => '用户id不存在'
         ];
     }
 }

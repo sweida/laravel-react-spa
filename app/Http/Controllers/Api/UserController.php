@@ -11,6 +11,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Tymon\JWTAuth\Exceptions\TokenExpiredException;
 
+// use App\Http\Resources\UserResource;
+
 class UserController extends Controller
 {
     //用户注册
@@ -43,14 +45,15 @@ class UserController extends Controller
     }
 
     //返回指定用户信息
-    public function show(User $user){
-        // return $this->success(new UserResource($user));
+    public function show(UserRequest $request){
+        $user = User::find($request->id);
         return $this->success($user);
     }
 
     //返回用户列表 3个用户为一页
     public function list(){
         $users = User::paginate(3);
+        // return UserResource::collection($users);
         return $this->success($users);
     }
 
