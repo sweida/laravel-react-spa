@@ -32,4 +32,10 @@ Route::namespace('Api')->prefix('v1')->group(function () {
         //用户列表
         Route::any('/userlist','UserController@list')->name('users.list');
     });
+
+    // 图片上传又拍云
+    Route::post('/image/uplod', 'ImageController@uplod')->name('image.uplod');
+    Route::post('/image/delete', 'ImageController@delete')->name('image.delete');
+
 });
+
