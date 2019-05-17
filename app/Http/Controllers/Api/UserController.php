@@ -6,7 +6,6 @@ namespace App\Http\Controllers\Api;
 use App\Models\User;
 use Hash;
 use App\Http\Requests\UserRequest;
-use App\Http\Requests\LoginRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Tymon\JWTAuth\Exceptions\TokenExpiredException;
@@ -22,7 +21,7 @@ class UserController extends Controller
     }
 
     //用户登录
-    public function login(LoginRequest $request){
+    public function login(UserRequest $request){
         $token=Auth::guard('api')->attempt(
             ['name'=>$request->name,'password'=>$request->password]
         );
