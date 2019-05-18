@@ -120,3 +120,10 @@ composer require awssat/laravel-visits
 # 添加配置文件
 php artisan vendor:publish --provider="awssat\Visits\VisitsServiceProvider"
 ```
+
+#### 关联模型要写在model里，不能写在controller里
+```
+public function user() {
+    return $this->belongsTo('App\Models\User');
+}
+```

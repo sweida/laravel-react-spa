@@ -31,6 +31,8 @@ Route::namespace('Api')->prefix('v1')->group(function () {
         Route::get('/user','UserController@show')->name('users.show');
         //用户列表
         Route::get('/userlist','UserController@list')->name('users.list');
+
+        // Route::get('/comment/person','CommentController@person')->name('comment.person');
     });
 
     // 图片上传又拍云
@@ -41,9 +43,19 @@ Route::namespace('Api')->prefix('v1')->group(function () {
     Route::post('/article/add', 'ArticleController@add')->name('article.add');
     Route::post('/article/edit', 'ArticleController@edit')->name('article.edit');
     Route::get('/articlelist', 'ArticleController@list')->name('article.list');
-    Route::get('/article','ArticleController@detail')->name('article.detail');
+    Route::any('/article','ArticleController@detail')->name('article.detail');
     Route::get('/article/delete','ArticleController@delete')->name('article.delete');
     Route::get('/article/restored','ArticleController@restored')->name('article.restored');
     Route::get('/article/reallydelete','ArticleController@reallyDelete')->name('article.reallyDelete');
+
+    // 评论模块
+    Route::post('/comment/add', 'CommentController@add')->name('comment.add');
+    Route::post('/comment/edit', 'CommentController@edit')->name('comment.edit');
+    Route::get('/commentlist', 'CommentController@list')->name('comment.list');
+    Route::get('/comment/delete','CommentController@delete')->name('comment.delete');
+    Route::get('/comment/read','CommentController@read')->name('comment.read');
+    Route::middleware('api.refresh')->group(function () {
+        Route::get('/comment/person','CommentController@person')->name('comment.person');
+    });
 });
 

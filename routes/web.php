@@ -16,3 +16,4 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('testRedis','RedisController@testRedis')->name('testRedis');
