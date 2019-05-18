@@ -10,7 +10,7 @@ use App\Http\Requests\CommentRequest;
 
 class CommentController extends Controller
 {
-    // 添加评论
+    // 添加评论, 回复评论
     public function add(CommentRequest $request){
         // 获取用户id
         $user = Auth::guard('api')->user();
@@ -58,7 +58,11 @@ class CommentController extends Controller
 
     // 获取所有评论 分页
     public function list(){
-        $comments = Comment::paginate(10);
+        $comments = Comment::with(['user'=>function($query){
+                $query->select('id','name');
+                }])
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
         return $this->success($comments);
     }
 

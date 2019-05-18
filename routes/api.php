@@ -42,7 +42,7 @@ Route::namespace('Api')->prefix('v1')->group(function () {
     // 添加文章模块
     Route::post('/article/add', 'ArticleController@add')->name('article.add');
     Route::post('/article/edit', 'ArticleController@edit')->name('article.edit');
-    Route::get('/articlelist', 'ArticleController@list')->name('article.list');
+    Route::get('/article/list', 'ArticleController@list')->name('article.list');
     Route::any('/article','ArticleController@detail')->name('article.detail');
     Route::get('/article/delete','ArticleController@delete')->name('article.delete');
     Route::get('/article/restored','ArticleController@restored')->name('article.restored');
@@ -51,11 +51,21 @@ Route::namespace('Api')->prefix('v1')->group(function () {
     // 评论模块
     Route::post('/comment/add', 'CommentController@add')->name('comment.add');
     Route::post('/comment/edit', 'CommentController@edit')->name('comment.edit');
-    Route::get('/commentlist', 'CommentController@list')->name('comment.list');
-    Route::get('/comment/delete','CommentController@delete')->name('comment.delete');
+    Route::get('/comment/list', 'CommentController@list')->name('comment.list');
     Route::get('/comment/read','CommentController@read')->name('comment.read');
     Route::middleware('api.refresh')->group(function () {
+        Route::get('/comment/delete','CommentController@delete')->name('comment.delete');
         Route::get('/comment/person','CommentController@person')->name('comment.person');
     });
+
+    // 留言模块
+    Route::post('/message/add', 'MessageController@add')->name('message.add');
+    Route::post('/message/edit', 'MessageController@edit')->name('message.edit');
+    Route::get('/message/list', 'MessageController@list')->name('message.list');
+    Route::middleware('api.refresh')->group(function () {
+        Route::get('/message/delete','MessageController@delete')->name('message.delete');
+        Route::get('/message/person','messageController@person')->name('message.person');
+    });
+
 });
 

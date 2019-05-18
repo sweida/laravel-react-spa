@@ -102,15 +102,14 @@ return [
 
 
 ```
+# 添加model
+php artisan make:model Models/Article -m
+
 # 添加控制器
-php artisan make:controller Api/UserController
+php artisan make:controller Api/ArticleController
 
 # 添加request
-php artisan make:request ImageRequest
-
-# 添加model
-php artisan make:model Models/article
-
+php artisan make:request ArticleRequest
 ```
 
 ```
