@@ -30,25 +30,29 @@ class ArticleController extends Controller
     }
 
     //返回指定文章
-    public function detail(ArticleRequest $request){
+    public function detail(ArticleRequest $request, Article $article){
         $id = $request->get('id');
         if ($request->all)
             // 包括下架文章
-            $article = Article::withTrashed()->find($id);
+            $artic = $article::withTrashed()->find($id);
         else
-            $article = Article::find($id);
+            $artic = $article::find($id);
+
+        // 访问统计
+        visits($article)->increment();
 
         // 上一篇和下一篇文章
-        if ($article){
+        if ($artic){
             $prevId = Article::where('id', '<', $id)->max('id');
             $nextId = Article::where('id', '>', $id)->min('id');
-            $article->prevArticle = Article::where('id', $prevId)->get(['id', 'title']);
-            $article->nextrAticle = Article::where('id', $nextId)->get(['id', 'title']);
+            $artic->prevArticle = Article::where('id', $prevId)->get(['id', 'title']);
+            $artic->nextrAticle = Article::where('id', $nextId)->get(['id', 'title']);
+            $artic->view_count = visits($article)->count();
         } else {
             return $this->failed('该文章已经下架');
         }
 
-        return $this->success($article);
+        return $this->success($artic);
             
     }
 

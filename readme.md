@@ -5,6 +5,9 @@
 # 复制配置文件
 cp .env.example .env
 
+# 修改时区 config > app.php文件
+'timezone' => 'PRC'
+
 # 生成key
 php artisan key:generate
 
@@ -100,12 +103,20 @@ return [
 
 ```
 # 添加控制器
-php artisan make:controller Api/CommonController
+php artisan make:controller Api/UserController
 
 # 添加request
-php artisan make:request imageRequest
+php artisan make:request ImageRequest
 
 # 添加model
-php artisan make:model article
+php artisan make:model Models/article
 
+```
+
+```
+# 安装浏览统计插件
+composer require awssat/laravel-visits
+
+# 添加配置文件
+php artisan vendor:publish --provider="awssat\Visits\VisitsServiceProvider"
 ```
