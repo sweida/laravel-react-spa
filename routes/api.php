@@ -75,5 +75,9 @@ Route::namespace('Api')->prefix('v1')->group(function () {
         Route::post('/link/delete','LinkController@delete')->name('link.delete');
     });
 
+    // 网站信息模块
+    Route::post('/webinfo/set', 'WebinfoController@set')->name('webinfo.set');
+    Route::get('/webinfo/read', 'WebinfoController@read')->name('webinfo.read');
+
 });
 

@@ -66,25 +66,20 @@ class ArticleController extends Controller
 
     // 下架文章
     public function delete(ArticleRequest $request){
-        $article = Article::find($request->id);
-        return $article->delete() ?
-            $this->success('文章下架成功') :
-            $this->failed('文章下架失败');
+        Article::findOrFail($request->id)->delete();
+        return $this->success('文章下架成功');
     }
 
     // 恢复下架文章
     public function restored(ArticleRequest $request){
-        return Article::withTrashed()->find($request->id)->restore() ?
-            $this->success('文章恢复成功') :
-            $this->failed('文章恢复失败');
+        Article::withTrashed()->findOrFail($request->id)->restore();
+        return $this->success('文章恢复成功');
     }
 
     // 真删除文章
     public function reallyDelete(ArticleRequest $request){
-        $article = Article::find($request->id);
-        return $article->forceDelete() ?
-            $this->success('文章删除成功') :
-            $this->failed('文章删除失败');
+        Article::findOrFail($request->id)->forceDelete();
+        return $this->success('文章删除成功');
     }
 
 }

@@ -14,7 +14,19 @@ class CreateWebinfosTable extends Migration
     public function up()
     {
         Schema::create('webinfos', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->increments('id');
+            $table->string('title')->nullable();
+            $table->string('keyword')->nullable();
+            $table->text('description')->nullable();
+            $table->text('personinfo')->nullable();
+            $table->string('github')->nullable();
+            $table->string('icp')->nullable();
+            $table->string('weixin')->nullable();
+            $table->string('zhifubao')->nullable();
+            $table->string('qq')->nullable();
+            $table->string('phone')->nullable();
+            $table->string('email')->nullable();
+            $table->date('startTime')->nullable();
             $table->timestamps();
         });
     }
