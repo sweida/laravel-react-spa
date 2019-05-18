@@ -70,8 +70,7 @@ class CommentController extends Controller
                 }])
             ->where('article_id', $request->article_id)
             ->orderBy('created_at', 'desc')
-            ->get();
-        // $comments = Comment::paginate(10);
+            ->paginate(10);
         return $this->success($comments);
     }
 
@@ -81,8 +80,7 @@ class CommentController extends Controller
 
         $comments = Comment::where('user_id', $user['id'])
             ->orderBy('created_at', 'desc')
-            ->get();
-        // $comments = Comment::paginate(10);
+            ->paginate(10);
         return $this->success($comments);
     }
 
