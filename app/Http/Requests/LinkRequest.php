@@ -2,29 +2,30 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
-
 class LinkRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
-    public function authorize()
-    {
-        return false;
-    }
-
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
-     */
     public function rules()
     {
+        if (FormRequest::getPathInfo() == '/api/v1/link/add'){
+            return [
+                'title' => ['required'],
+                'url' => ['required'],
+            ];
+        } else {
+            return [
+                'id' => ['required', 'exists:links,id']
+            ];
+        }
+
+    }
+
+    public function messages()
+    {
         return [
-            //
+            'title.required'=>'标题不能为空',
+            'url.required' => '链接不能为空',
+            'id.required' => 'id不能为空',
+            'id.exists' => 'id不存在',
         ];
     }
 }

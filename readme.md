@@ -22,6 +22,9 @@ php artisan migrate:refresh
 
 # 清空数据库重新生成表并生成数据
 php artisan migrate:refresh --seed
+
+# postman请求头设置herders (错误时才会返回json格式)
+X-Requested-With => XMLHttpRequest
 ```
 
 ### 安装jwt-auth
