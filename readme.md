@@ -141,6 +141,9 @@ php artisan make:seeder UsersTableSeeder
 # 数据填充
 php artisan db:seed
 
+# 填充指定模型
+php artisan db:seed --class=UsersTableSeeder
+
 # 重新生成数据库表并填充数据
 php artisan migrate:refresh --seed
 

@@ -23,14 +23,11 @@ Route::namespace('Api')->prefix('v1')->group(function () {
     Route::post('/login','UserController@login')->name('users.login');
     //当前用户信息
     Route::middleware('api.refresh')->group(function () {
-        //用户退出
         Route::get('/logout', 'UserController@logout')->name('users.logout');
-        // 当前的用户信息列表
         Route::get('/user/info','UserController@info')->name('users.info');
-        //指定用户信息
         Route::get('/user','UserController@show')->name('users.show');
-        //用户列表
         Route::get('/user/list','UserController@list')->name('users.list');
+        Route::post('/user/resetpassword','UserController@resetpassword')->name('users.resetpassword');
     });
 
     // 图片上传又拍云

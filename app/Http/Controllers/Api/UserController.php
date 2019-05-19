@@ -56,4 +56,23 @@ class UserController extends Controller
         return $this->success($users);
     }
 
+    // 修改密码
+    public function resetpassword(UserRequest $request){
+        $user = Auth::guard('api')->user();
+        $oldpassword = $request->get('oldpassword');
+
+        if (!Hash::check($oldpassword, $user->password))
+            return $this->failed('旧密码错误');
+
+        $user->update(['password' => $request->password]);
+        return $this->success('密码修改成功');
+    }
+
+
+    // 生成验证码
+    public function generate_captcha()
+    {
+        return rand(1000, 9999);
+    }
+
 }

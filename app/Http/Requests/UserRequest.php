@@ -6,22 +6,28 @@ class UserRequest extends FormRequest
 {
     public function rules()
     {
-        if (FormRequest::getPathInfo() == '/api/v1/signup'){
-            return [
-                'name' => ['required', 'max:16', 'unique:users,name'],
-                'email' => ['required', 'unique:users,email'],
-                'password' => ['required', 'max:32', 'min:6'],
-                'phone' => ['unique:users,phone']
-            ];
-        } else if (FormRequest::getPathInfo() == '/api/v1/login'){
-            return [
-                'name' => ['required', 'max:16', 'exists:users,name'],
-                'password' => ['required', 'max:32', 'min:6'],
-            ];
-        } else {   
-            return [
-                'id' => ['required', 'exists:users,id']
-            ];
+        switch (FormRequest::getPathInfo()){
+            case '/api/v1/signup':
+                return [
+                    'name' => ['required', 'max:16', 'unique:users,name'],
+                    'email' => ['required', 'unique:users,email'],
+                    'password' => ['required', 'between:6,20'],
+                    'phone' => ['unique:users,phone']
+                ];
+            case '/api/v1/login':
+                return [
+                    'name' => ['required', 'max:16', 'exists:users,name'],
+                    'password' => ['required', 'between:6,20'],
+                ];
+            case '/api/v1/user/resetpassword':
+                return [
+                    'oldpassword' => ['required', 'between:6,20'],
+                    'password' => ['required', 'between:6,20'],
+                ];
+            default:
+                return [
+                    'id' => ['required', 'exists:users,id']
+                ];
         }
     }
 
@@ -37,8 +43,11 @@ class UserRequest extends FormRequest
             'email.unique' => '邮箱已经存在',
             'phone.unique' => '手机号已存在',
             'password.required' => '密码不能为空',
-            'password.max' => '密码长度不能超过32个字符',
-            'password.min' => '密码长度不能少于6个字符', 
+            'oldpassword.required' => '旧密码不能为空',
+            'password.between' => '密码长度为6~20位之间',
+            'oldpassword.between' => '密码长度为6~20位之间',
+            // 'password.max' => '密码长度不能超过32个字符',
+            // 'password.min' => '密码长度不能少于6个字符', 
             'id.required'=>'id必须填写',
             'id.exists' => '用户id不存在'
         ];
