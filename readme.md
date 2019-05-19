@@ -130,8 +130,29 @@ public function user() {
 }
 ```
 
+#### 数据填充
+```
+# 生成User模型的工厂
+php artisan make:factory UserFactory --model=Models/User
+
+# 生成User的数据填充
+php artisan make:seeder UsersTableSeeder
+
+# 数据填充
+php artisan db:seed
+
+# 重新生成数据库表并填充数据
+php artisan migrate:refresh --seed
+
+# 进入数据填充测试
+php artisan tinker
+
+# 生成20个用户模型
+namespace App\Models;
+factory(User::class, 20)->create();
+```
+
 跨域medz/cors
-数据填充
 邮件功能
 pdf功能
 支付功能

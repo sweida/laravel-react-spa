@@ -30,7 +30,7 @@ Route::namespace('Api')->prefix('v1')->group(function () {
         //指定用户信息
         Route::get('/user','UserController@show')->name('users.show');
         //用户列表
-        Route::get('/userlist','UserController@list')->name('users.list');
+        Route::get('/user/list','UserController@list')->name('users.list');
     });
 
     // 图片上传又拍云

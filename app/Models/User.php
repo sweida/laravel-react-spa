@@ -24,7 +24,7 @@ class User extends Authenticatable implements JWTSubject
 
     // 接受的字段
     protected $fillable = [
-        'name', 'phone', 'email', 'password',
+        'name', 'phone', 'email', 'password', 'avatar_url'
     ];
 
     // 表格隐藏的字段

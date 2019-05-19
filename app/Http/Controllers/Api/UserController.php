@@ -51,7 +51,7 @@ class UserController extends Controller
 
     //返回用户列表 3个用户为一页
     public function list(){
-        $users = User::paginate(3);
+        $users = User::paginate(10);
         // return UserResource::collection($users);
         return $this->success($users);
     }
