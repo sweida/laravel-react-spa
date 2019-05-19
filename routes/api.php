@@ -38,13 +38,15 @@ Route::namespace('Api')->prefix('v1')->group(function () {
     Route::post('/image/delete', 'ImageController@delete')->name('image.delete');
 
     // 添加文章模块
-    Route::post('/article/add', 'ArticleController@add')->name('article.add');
-    Route::post('/article/edit', 'ArticleController@edit')->name('article.edit');
-    Route::post('/article/delete','ArticleController@delete')->name('article.delete');
     Route::get('/article/list', 'ArticleController@list')->name('article.list');
     Route::get('/article','ArticleController@detail')->name('article.detail');
-    Route::get('/article/restored','ArticleController@restored')->name('article.restored');
-    Route::get('/article/reallydelete','ArticleController@reallyDelete')->name('article.reallyDelete');
+    Route::middleware('api.refresh')->group(function () {
+        Route::post('/article/add', 'ArticleController@add')->name('article.add');
+        Route::post('/article/edit', 'ArticleController@edit')->name('article.edit');
+        Route::post('/article/delete','ArticleController@delete')->name('article.delete');
+        Route::get('/article/restored','ArticleController@restored')->name('article.restored');
+        Route::get('/article/reallydelete','ArticleController@reallyDelete')->name('article.reallyDelete');
+    });
 
     // 评论模块
     Route::post('/comment/add', 'CommentController@add')->name('comment.add');
@@ -53,7 +55,7 @@ Route::namespace('Api')->prefix('v1')->group(function () {
     Route::middleware('api.refresh')->group(function () {
         Route::post('/comment/edit', 'CommentController@edit')->name('comment.edit');
         Route::post('/comment/delete','CommentController@delete')->name('comment.delete');
-        // 个人评论
+        // 获取个人的所有评论
         Route::get('/comment/person','CommentController@person')->name('comment.person');
     });
 
@@ -68,11 +70,20 @@ Route::namespace('Api')->prefix('v1')->group(function () {
     });
 
     // 友情链接模块
-    Route::post('/link/add', 'LinkController@add')->name('link.add');
     Route::get('/link/list', 'LinkController@list')->name('link.list');
     Route::middleware('api.refresh')->group(function () {
+        Route::post('/link/add', 'LinkController@add')->name('link.add');
         Route::post('/link/edit', 'LinkController@edit')->name('link.edit');
         Route::post('/link/delete','LinkController@delete')->name('link.delete');
+    });
+
+    // 图片广告模块
+    Route::get('/ad/list', 'AdController@list')->name('ad.list');
+    Route::get('/ad', 'AdController@show')->name('ad.show');
+    Route::middleware('api.refresh')->group(function () {
+        Route::post('/ad/add', 'AdController@add')->name('ad.add');
+        Route::post('/ad/edit', 'AdController@edit')->name('ad.edit');
+        Route::post('/ad/delete','AdController@delete')->name('ad.delete');
     });
 
     // 网站信息模块

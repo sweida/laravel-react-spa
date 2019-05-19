@@ -129,3 +129,9 @@ public function user() {
     return $this->belongsTo('App\Models\User');
 }
 ```
+
+跨域medz/cors
+数据填充
+邮件功能
+pdf功能
+支付功能

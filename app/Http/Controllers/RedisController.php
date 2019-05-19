@@ -31,4 +31,18 @@ class RedisController extends Controller
         //  }
         // dump($values);
     }
+
+    public function set()
+    {
+        Redis::set('name', 'sean');
+        return ['msg' => '设置成功'];
+    }
+
+    public function get()
+    {
+        $name = Redis::get('name');
+        var_dump($name);
+    }
+
+
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Models\Article;
 use Illuminate\Http\Request;
 use App\Http\Requests\ArticleRequest;
+use Illuminate\Support\Facades\Redis;
 
 class ArticleController extends Controller
 {
@@ -38,8 +39,13 @@ class ArticleController extends Controller
         else
             $article = Article::find($id);
 
+        // 使用redis统计访问量
+        $count = intval(Redis::get('count:'.$id));
+        $count+=1;
+        Redis::set('count:'.$id, $count);
+
         // 访问统计
-        visits($article)->increment(2);
+        // visits($article)->increment();
 
         // 上一篇和下一篇文章
         if ($article){
@@ -47,7 +53,8 @@ class ArticleController extends Controller
             $nextId = Article::where('id', '>', $id)->min('id');
             $article->prevArticle = Article::where('id', $prevId)->get(['id', 'title']);
             $article->nextrAticle = Article::where('id', $nextId)->get(['id', 'title']);
-            $article->view_count = visits(new Article)->count();
+            // $article->view_count = visits($article)->count();
+            $article->view_count = $count;
         } else {
             return $this->failed('该文章已经下架');
         }
