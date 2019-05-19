@@ -156,3 +156,5 @@ factory(User::class, 20)->create();
 邮件功能
 pdf功能
 支付功能
+
+超级管理员权限

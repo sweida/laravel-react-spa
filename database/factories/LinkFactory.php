@@ -10,6 +10,6 @@ $factory->define(Link::class, function (Faker $faker) {
         'title' => $faker->name,
         'url' => $faker->url,
         'desc' => $faker->sentence,
-        'img' => $faker->url,
+        'img' => $faker->imageUrl($width = 200, $height = 200),
     ];
 });
