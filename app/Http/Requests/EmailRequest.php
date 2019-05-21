@@ -12,7 +12,7 @@ class EmailRequest extends FormRequest
             ];
         } else {
             return [
-                'captcha' => ['required'],
+                'captcha' => ['required', 'between:4,4'],
                 'email' => ['required', 'exists:users,email'],
                 'password' => ['required', 'between:6,20'],
             ];
@@ -27,6 +27,7 @@ class EmailRequest extends FormRequest
             'email.required' => '邮箱不能为空',
             'email.exists' => '该邮箱未注册',
             'captcha.required'=>'验证码不能为空',
+            'captcha.between' => '验证码为4位数',
             'password.required' => '新密码不能为空',
             'password.between' => '密码长度为6~20位之间',
         ];
