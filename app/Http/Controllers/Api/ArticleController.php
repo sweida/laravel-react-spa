@@ -12,8 +12,6 @@ use Illuminate\Support\Facades\DB;
 
 class ArticleController extends Controller
 {
-
-
     // 添加文章
     public function add(ArticleRequest $request){
         $article = Article::create($request->all());
@@ -50,6 +48,12 @@ class ArticleController extends Controller
                 ->where('tag', $request->tag)
                 ->orderBy('article_id', 'desc')
                 ->paginate(10, 'article_id');
+            // 返回没有删除的文章
+            $articles = $articles->where('article','!=', null);
+
+            if (!$articles->first())
+                return $this->message('该标签找不到文章');
+
             foreach($articles as $item)
                 $item->id = $item->article_id;
         } else
@@ -58,7 +62,8 @@ class ArticleController extends Controller
         // 拿回文章的标签和评论总数
         foreach($articles as $item){
             $tag = Tag::where('article_id', $item->id)->get(['tag']);
-            $item->tag = array_column($tag->toArray(), 'tag');
+            // 去除重复标签
+            $item->tag = array_values(array_unique(array_column($tag->toArray(), 'tag')));
             $item->commentCount = Comment::where('article_id', $item->id)->count();
         }  
         return $this->success($articles);
@@ -146,14 +151,14 @@ class ArticleController extends Controller
 
     // 真删除文章
     public function reallyDelete(ArticleRequest $request){
-        Article::findOrFail($request->id)->forceDelete();
         Tag::where('article_id', $request->id)->delete();
+        Article::findOrFail($request->id)->forceDelete();
         return $this->success('文章删除成功');
     }
 
     // 点赞文章
     public function like(ArticleRequest $request) {        
-        $article = $this->find($request->id);
+        $article = Article::find($request->id);
         $article->like +=1;
         $article->save();
         return $this->success('点赞成功！');

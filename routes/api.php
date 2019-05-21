@@ -39,7 +39,7 @@ Route::namespace('Api')->prefix('v1')->group(function () {
     // 添加文章模块
     Route::get('/article/list', 'ArticleController@list')->name('article.list');
     Route::get('/article/classify', 'ArticleController@classify')->name('article.classify');
-    Route::get('/article/tag', 'TagController@read')->name('article.tag');
+    Route::get('/article/like', 'ArticleController@like')->name('article.like');
     Route::get('/article','ArticleController@detail')->name('article.detail');
     Route::get('/article/orderbyType','ArticleController@orderbyType')->name('article.orderbyType');
     Route::middleware('api.refresh')->group(function () {
