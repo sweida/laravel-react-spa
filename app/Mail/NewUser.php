@@ -30,6 +30,7 @@ class NewUser extends Mailable
     public function build()
     {
         return $this->markdown('mails.newuser')
+                    ->subject('重置密码')
                     ->with('data', $this->user);
     }
 }
