@@ -34,7 +34,7 @@ return [
     | Visits from same ip will be counted after ip expire
     |
     */
-    'remember_ip' => 15 * 60,
+    'remember_ip' => 30 * 60,
 
     /*
     |--------------------------------------------------------------------------

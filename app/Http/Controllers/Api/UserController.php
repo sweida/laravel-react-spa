@@ -69,10 +69,4 @@ class UserController extends Controller
     }
 
 
-    // 生成验证码
-    public function generate_captcha()
-    {
-        return rand(1000, 9999);
-    }
-
 }

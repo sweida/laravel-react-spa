@@ -29,6 +29,8 @@ Route::namespace('Api')->prefix('v1')->group(function () {
         Route::get('/user/list','UserController@list')->name('users.list');
         Route::post('/user/resetpassword','UserController@resetpassword')->name('users.resetpassword');
     });
+    Route::post('/user/send_email','CommonController@send_email')->name('users.send_email');
+    Route::post('/user/check_captcha','CommonController@check_captcha')->name('users.check_captcha');
 
     // 图片上传又拍云
     Route::post('/image/uplod', 'ImageController@uplod')->name('image.uplod');

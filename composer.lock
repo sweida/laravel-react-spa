@@ -2138,16 +2138,16 @@
         },
         {
             "name": "qoraiche/laravel-mail-editor",
-            "version": "v1.1.11",
+            "version": "v1.1.15",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Qoraiche/laravel-mail-editor.git",
-                "reference": "37c38c00d892c893823841622a1306322d69bc32"
+                "reference": "01fbc05c992162332d296cd5150a8d9aa33df90c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Qoraiche/laravel-mail-editor/zipball/37c38c00d892c893823841622a1306322d69bc32",
-                "reference": "37c38c00d892c893823841622a1306322d69bc32",
+                "url": "https://api.github.com/repos/Qoraiche/laravel-mail-editor/zipball/01fbc05c992162332d296cd5150a8d9aa33df90c",
+                "reference": "01fbc05c992162332d296cd5150a8d9aa33df90c",
                 "shasum": ""
             },
             "require": {
@@ -2198,7 +2198,7 @@
                 "mailable-editor",
                 "markdown"
             ],
-            "time": "2019-05-06T17:59:07+00:00"
+            "time": "2019-05-18T01:32:12+00:00"
         },
         {
             "name": "ralouphie/getallheaders",

@@ -20,6 +20,7 @@ class CreateUsersTable extends Migration
             $table->string('phone')->unique()->nullable();
             $table->text('avatar_url')->nullable();
             $table->string('password');
+            $table->integer('captcha')->nullable();
             $table->text('intro')->nullable();
             $table->string('is_admin')->nullable();
             $table->timestamps();

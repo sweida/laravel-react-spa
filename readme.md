@@ -78,6 +78,15 @@ php artisan migrate
 http://localhost:8080/maileclipse
 ```
 
+# 手动生成markdown邮件
+```
+php artisan make:mail NweUser --markdown=mails.newsuer
+
+# router 文件
+new App\Mails\NewUser()
+```
+
+
 ### 图片上传又拍云
 ```
 composer require "jellybool/flysystem-upyun"
@@ -115,12 +124,17 @@ php artisan make:controller Api/ArticleController
 php artisan make:request ArticleRequest
 ```
 
+### 安装浏览统计插件
 ```
-# 安装浏览统计插件
 composer require awssat/laravel-visits
 
 # 添加配置文件
 php artisan vendor:publish --provider="awssat\Visits\VisitsServiceProvider"
+
+# 修改.env文件
+CACHE_DRIVER=file 改成 CACHE_DRIVER=array
+
+# 在Postman里要设置 headers->User-Agent
 ```
 
 #### 关联模型要写在model里，不能写在controller里
@@ -154,6 +168,9 @@ php artisan tinker
 namespace App\Models;
 factory(User::class, 20)->create();
 ```
+
+
+
 
 跨域medz/cors
 邮件功能
