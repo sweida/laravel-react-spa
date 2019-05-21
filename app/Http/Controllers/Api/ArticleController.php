@@ -3,9 +3,12 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\Article;
+use App\Models\Tag;
+use App\Models\Comment;
 use Illuminate\Http\Request;
 use App\Http\Requests\ArticleRequest;
 use Illuminate\Support\Facades\Redis;
+use Illuminate\Support\Facades\DB;
 
 class ArticleController extends Controller
 {
@@ -13,7 +16,21 @@ class ArticleController extends Controller
 
     // 添加文章
     public function add(ArticleRequest $request){
-        Article::create($request->all());
+        $article = Article::create($request->all());
+
+        // 将拿到的标签分割字符串
+        if ($request->get('tags')){
+            $tagArr = explode(",",$request->get('tags'));
+
+            // 将每个标签遍历插入数据库
+            foreach($tagArr as $tag){
+                $tag = DB::table('tags')->insert([
+                    'tag' => $tag,
+                    'article_id' => $article->id,
+                    'classify' => $article->classify
+                ]);
+            }
+        }
         return $this->success('文章添加成功！');
     }
 
@@ -23,14 +40,31 @@ class ArticleController extends Controller
         $data = ['id', 'title', 'img', 'classify', 'clicks', 'like', 'created_at'];
 
         if($request->all)
-            // 包括下架的文章
             $articles = Article::withTrashed()->paginate(10, $data);
-        else
+        else if ($request->classify)
+            $articles = Article::whereClassify($request->classify)->paginate(10, $data);
+        else if ($request->tag) {
+            $articles = Tag::with(['article'=>function($query){
+                    $query->select('id', 'title', 'img', 'clicks', 'like', 'created_at', 'classify');
+                 }])
+                ->where('tag', $request->tag)
+                ->orderBy('article_id', 'desc')
+                ->paginate(10, 'article_id');
+            foreach($articles as $item)
+                $item->id = $item->article_id;
+        } else
             $articles = Article::paginate(10, $data);
+
+        // 拿回文章的标签和评论总数
+        foreach($articles as $item){
+            $tag = Tag::where('article_id', $item->id)->get(['tag']);
+            $item->tag = array_column($tag->toArray(), 'tag');
+            $item->commentCount = Comment::where('article_id', $item->id)->count();
+        }  
         return $this->success($articles);
     }
 
-    //返回指定文章
+    //  查看文章详情
     public function detail(ArticleRequest $request){
         $id = $request->get('id');
         if ($request->all)
@@ -49,6 +83,9 @@ class ArticleController extends Controller
             $article->prevArticle = Article::where('id', $prevId)->get(['id', 'title']);
             $article->nextrAticle = Article::where('id', $nextId)->get(['id', 'title']);
             $article->view_count = visits($article)->count();
+            // 文章标签
+            $tag = Tag::where('article_id', $id)->get(['tag']);
+            $article->tag = array_column($tag->toArray(), 'tag');
         } else {
             return $this->failed('该文章已经下架');
         }
@@ -60,7 +97,39 @@ class ArticleController extends Controller
         $article = Article::findOrFail($request->id);
         $article->update($request->all());
 
+        // 如果有修改标签
+        if ($request->get('tags')){
+            $this->editTag($request->id, $request->tags, $request->classify);
+        }
+
         return $this->success('文章修改成功！');
+    }
+
+    // 修改标签
+    public function editTag($id, $tags, $classify){
+        // 新的标签值
+        $newtags = explode(",", $tags);
+        // 旧的标签值
+        $oldTags = Tag::where('article_id', $id)->get(['tag']);
+        $oldTags = array_column($oldTags->toArray(), 'tag');
+
+        sort($newtags);
+        sort($oldTags);
+
+        // 如果不同
+        if ($newtags != $oldTags) {
+            // 先删除数据
+            Tag::where('article_id', $id)->delete();
+
+            // 再添加新的数据
+            foreach($newtags as $tag){
+                $tag = DB::table('tags')->insert([
+                    'tag' => $tag,
+                    'article_id' => $id,
+                    'classify' => $classify
+                ]);
+            }
+        }
     }
 
     // 下架文章
@@ -78,7 +147,31 @@ class ArticleController extends Controller
     // 真删除文章
     public function reallyDelete(ArticleRequest $request){
         Article::findOrFail($request->id)->forceDelete();
+        Tag::where('article_id', $request->id)->delete();
         return $this->success('文章删除成功');
     }
 
+    // 点赞文章
+    public function like(ArticleRequest $request) {        
+        $article = $this->find($request->id);
+        $article->like +=1;
+        $article->save();
+        return $this->success('点赞成功！');
+    }
+
+    // 获取文章所有分类及分类下的标签
+    public function classify(){
+        $classifys = Article::groupBy('classify')->pluck('classify');
+        $classifys = array_values(array_filter($classifys->toArray()));
+
+        for($i=0;$i<count($classifys);$i++){
+            $tag = Tag::where('classify', $classifys[$i])->get(['tag']);
+            
+            $newArray[$i]['name'] = $classifys[$i];
+            $newArray[$i]['tags'] = array_column($tag->toArray(), 'tag');
+        }
+        return $this->success($newArray);
+    }
+
 }
+

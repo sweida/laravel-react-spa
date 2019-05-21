@@ -44,5 +44,8 @@ class RedisController extends Controller
         var_dump($name);
     }
 
+    public function del(){
+        Redis::del('name');
+    }
 
 }
