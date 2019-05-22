@@ -152,6 +152,7 @@ class ArticleController extends Controller
     // 真删除文章
     public function reallyDelete(ArticleRequest $request){
         Tag::where('article_id', $request->id)->delete();
+        Comment::where('article_id', $request->id)->delete();
         Article::findOrFail($request->id)->forceDelete();
         return $this->success('文章删除成功');
     }

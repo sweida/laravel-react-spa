@@ -41,13 +41,12 @@ Route::namespace('Api')->prefix('v1')->group(function () {
     Route::get('/article/classify', 'ArticleController@classify')->name('article.classify');
     Route::get('/article/like', 'ArticleController@like')->name('article.like');
     Route::get('/article','ArticleController@detail')->name('article.detail');
-    Route::get('/article/orderbyType','ArticleController@orderbyType')->name('article.orderbyType');
     Route::middleware('api.refresh')->group(function () {
         Route::post('/article/add', 'ArticleController@add')->name('article.add');
         Route::post('/article/edit', 'ArticleController@edit')->name('article.edit');
         Route::post('/article/delete','ArticleController@delete')->name('article.delete');
-        Route::get('/article/restored','ArticleController@restored')->name('article.restored');
-        Route::get('/article/reallydelete','ArticleController@reallyDelete')->name('article.reallyDelete');
+        Route::post('/article/restored','ArticleController@restored')->name('article.restored');
+        Route::post('/article/reallydelete','ArticleController@reallyDelete')->name('article.reallyDelete');
     });
 
     // 评论模块
