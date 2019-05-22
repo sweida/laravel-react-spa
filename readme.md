@@ -173,7 +173,6 @@ factory(User::class, 20)->create();
 
 
 跨域medz/cors
-邮件功能
 pdf功能
 支付功能
 

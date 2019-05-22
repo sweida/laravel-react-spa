@@ -21,6 +21,10 @@ use Illuminate\Http\Request;
 Route::namespace('Api')->prefix('v1')->group(function () {
     Route::post('/signup','UserController@signup')->name('users.signup');
     Route::post('/login','UserController@login')->name('users.login');
+    // 管理员登录
+    Route::middleware('adminLogin')->group(function () {
+        Route::post('/adminlogin', 'UserController@login')->name('users.adminlogin');
+    });
     //当前用户信息
     Route::middleware('api.refresh')->group(function () {
         Route::get('/logout', 'UserController@logout')->name('users.logout');
@@ -33,15 +37,17 @@ Route::namespace('Api')->prefix('v1')->group(function () {
     Route::post('/user/check_captcha','CommonController@check_captcha')->name('users.check_captcha');
 
     // 图片上传又拍云
-    Route::post('/image/uplod', 'ImageController@uplod')->name('image.uplod');
-    Route::post('/image/delete', 'ImageController@delete')->name('image.delete');
+    Route::middleware(['api.refresh', 'adminRole'])->group(function () {
+        Route::post('/image/uplod', 'ImageController@uplod')->name('image.uplod');
+        Route::post('/image/delete', 'ImageController@delete')->name('image.delete');
+    });
 
     // 添加文章模块
     Route::get('/article/list', 'ArticleController@list')->name('article.list');
     Route::get('/article/classify', 'ArticleController@classify')->name('article.classify');
     Route::get('/article/like', 'ArticleController@like')->name('article.like');
     Route::get('/article','ArticleController@detail')->name('article.detail');
-    Route::middleware('api.refresh')->group(function () {
+    Route::middleware(['api.refresh', 'adminRole'])->group(function () {
         Route::post('/article/add', 'ArticleController@add')->name('article.add');
         Route::post('/article/edit', 'ArticleController@edit')->name('article.edit');
         Route::post('/article/delete','ArticleController@delete')->name('article.delete');
@@ -72,7 +78,7 @@ Route::namespace('Api')->prefix('v1')->group(function () {
 
     // 友情链接模块
     Route::get('/link/list', 'LinkController@list')->name('link.list');
-    Route::middleware('api.refresh')->group(function () {
+    Route::middleware(['api.refresh', 'adminRole'])->group(function () {
         Route::post('/link/add', 'LinkController@add')->name('link.add');
         Route::post('/link/edit', 'LinkController@edit')->name('link.edit');
         Route::post('/link/delete','LinkController@delete')->name('link.delete');
@@ -81,14 +87,14 @@ Route::namespace('Api')->prefix('v1')->group(function () {
     // 图片广告模块
     Route::get('/ad/list', 'AdController@list')->name('ad.list');
     Route::get('/ad', 'AdController@show')->name('ad.show');
-    Route::middleware('api.refresh')->group(function () {
+    Route::middleware(['api.refresh', 'adminRole'])->group(function () {
         Route::post('/ad/add', 'AdController@add')->name('ad.add');
         Route::post('/ad/edit', 'AdController@edit')->name('ad.edit');
         Route::post('/ad/delete','AdController@delete')->name('ad.delete');
+        Route::post('/webinfo/set', 'WebinfoController@set')->name('webinfo.set');
     });
 
     // 网站信息模块
-    Route::post('/webinfo/set', 'WebinfoController@set')->name('webinfo.set');
     Route::get('/webinfo/read', 'WebinfoController@read')->name('webinfo.read');
 
 });
