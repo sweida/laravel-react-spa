@@ -17,7 +17,7 @@ class MessageController extends Controller
         $array['user_id'] = $user['id'];
 
         Message::create($array);
-        return $this->success('添加成功');
+        return $this->message('留言成功！');
     }
 
     // 修改留言
@@ -30,7 +30,7 @@ class MessageController extends Controller
 
         $message->content = $request->get('content');
         return $message->save() ? 
-            $this->success('留言修改成功') :
+            $this->message('留言修改成功') :
             $this->failed('留言修改失败');
     }
 
@@ -43,7 +43,7 @@ class MessageController extends Controller
             return $this->failed('你没有权限删除');
 
         return $message->delete() ?
-            $this->success('留言删除成功') :
+            $this->message('留言删除成功') :
             $this->failed('留言删除失败');
     }
 

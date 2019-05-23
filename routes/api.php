@@ -27,7 +27,7 @@ Route::namespace('Api')->prefix('v1')->group(function () {
     });
     //当前用户信息
     Route::middleware('api.refresh')->group(function () {
-        Route::get('/logout', 'UserController@logout')->name('users.logout');
+        Route::post('/logout', 'UserController@logout')->name('users.logout');
         Route::get('/user/info','UserController@info')->name('users.info');
         Route::get('/user','UserController@show')->name('users.show');
         Route::get('/user/list','UserController@list')->name('users.list');
@@ -43,10 +43,10 @@ Route::namespace('Api')->prefix('v1')->group(function () {
     });
 
     // 添加文章模块
-    Route::get('/article/list', 'ArticleController@list')->name('article.list');
+    Route::post('/article/list', 'ArticleController@list')->name('article.list');
     Route::get('/article/classify', 'ArticleController@classify')->name('article.classify');
-    Route::get('/article/like', 'ArticleController@like')->name('article.like');
-    Route::get('/article','ArticleController@detail')->name('article.detail');
+    Route::post('/article/like', 'ArticleController@like')->name('article.like');
+    Route::post('/article','ArticleController@detail')->name('article.detail');
     Route::middleware(['api.refresh', 'adminRole'])->group(function () {
         Route::post('/article/add', 'ArticleController@add')->name('article.add');
         Route::post('/article/edit', 'ArticleController@edit')->name('article.edit');
@@ -58,7 +58,7 @@ Route::namespace('Api')->prefix('v1')->group(function () {
     // 评论模块
     Route::post('/comment/add', 'CommentController@add')->name('comment.add');
     Route::get('/comment/list', 'CommentController@list')->name('comment.list');
-    Route::get('/comment/read','CommentController@read')->name('comment.read');
+    Route::post('/comment/read','CommentController@read')->name('comment.read');
     Route::middleware('api.refresh')->group(function () {
         Route::post('/comment/edit', 'CommentController@edit')->name('comment.edit');
         Route::post('/comment/delete','CommentController@delete')->name('comment.delete');
@@ -68,7 +68,7 @@ Route::namespace('Api')->prefix('v1')->group(function () {
 
     // 留言模块
     Route::post('/message/add', 'MessageController@add')->name('message.add');
-    Route::get('/message/list', 'MessageController@list')->name('message.list');
+    Route::post('/message/list', 'MessageController@list')->name('message.list');
     Route::middleware('api.refresh')->group(function () {
         Route::post('/message/edit', 'MessageController@edit')->name('message.edit');
         Route::post('/message/delete','MessageController@delete')->name('message.delete');
@@ -86,7 +86,7 @@ Route::namespace('Api')->prefix('v1')->group(function () {
 
     // 图片广告模块
     Route::get('/ad/list', 'AdController@list')->name('ad.list');
-    Route::get('/ad', 'AdController@show')->name('ad.show');
+    Route::post('/ad', 'AdController@show')->name('ad.show');
     Route::middleware(['api.refresh', 'adminRole'])->group(function () {
         Route::post('/ad/add', 'AdController@add')->name('ad.add');
         Route::post('/ad/edit', 'AdController@edit')->name('ad.edit');

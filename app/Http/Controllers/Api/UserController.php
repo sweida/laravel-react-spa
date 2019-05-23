@@ -17,7 +17,7 @@ class UserController extends Controller
     //用户注册
     public function signup(UserRequest $request){
         User::create($request->all());
-        return $this->success('用户注册成功');
+        return $this->message('用户注册成功');
     }
 
     //用户登录
@@ -25,8 +25,9 @@ class UserController extends Controller
         $token=Auth::guard('api')->attempt(
             ['name'=>$request->name,'password'=>$request->password]
         );
+        $user = Auth::guard('api')->user();
         if($token){
-            return $this->success(['token' => 'bearer ' . $token]);
+            return $this->success(['token' => 'bearer ' . $token, 'user_id' => $user->id]);
         }
         return $this->failed('密码有误！');
     }
@@ -34,7 +35,7 @@ class UserController extends Controller
     //用户退出
     public function logout(){
         Auth::guard('api')->logout();
-        return $this->success('退出成功...');
+        return $this->message('退出登录成功!');
     }
 
     //返回当前登录用户信息
@@ -59,13 +60,13 @@ class UserController extends Controller
     // 修改密码
     public function resetpassword(UserRequest $request){
         $user = Auth::guard('api')->user();
-        $oldpassword = $request->get('oldpassword');
+        $oldpassword = $request->get('old_password');
 
         if (!Hash::check($oldpassword, $user->password))
-            return $this->failed('旧密码错误');
+            return $this->message('旧密码错误');
 
-        $user->update(['password' => $request->password]);
-        return $this->success('密码修改成功');
+        $user->update(['password' => $request->new_password]);
+        return $this->message('密码修改成功');
     }
 
 

@@ -176,4 +176,7 @@ factory(User::class, 20)->create();
 pdf功能
 支付功能
 
-超级管理员权限
+
+### 生成随机头像
+https://avatars.dicebear.com/v2/identicon/:seed.svg
+![https://avatars.dicebear.com/v2/identicon/:seed.svg](https://avatars.dicebear.com/v2/identicon/1.svg)

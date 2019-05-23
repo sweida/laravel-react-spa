@@ -11,7 +11,7 @@ class AdController extends Controller
     // 添加广告
     public function add(AdRequest $request){
         Ad::create($request->all());
-        return $this->success('添加成功！');
+        return $this->message('添加成功！');
     }
 
     //返回列表 10篇为一页
@@ -23,13 +23,13 @@ class AdController extends Controller
     // 修改
     public function edit(Request $request){
         Ad::findorFail($request->id)->update($request->all());
-        return $this->success('修改成功');
+        return $this->message('修改成功');
     }
 
     // 删除
     public function delete(Request $request){
         Ad::findorFail($request->id)->delete();
-        return $this->success('删除成功');
+        return $this->message('删除成功');
     }
 
     // 返回某个类型或者单个id的图片
@@ -42,7 +42,7 @@ class AdController extends Controller
         else if ($id)
             $ads = Ad::find($id);
         else
-            return $this->failed('缺少参数type或者id');
+            return $this->message('缺少参数type或者id');
 
         return $this->success($ads);
     }

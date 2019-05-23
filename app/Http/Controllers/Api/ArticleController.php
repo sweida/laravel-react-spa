@@ -29,7 +29,7 @@ class ArticleController extends Controller
                 ]);
             }
         }
-        return $this->success('文章添加成功！');
+        return $this->message('文章添加成功！');
     }
 
     //返回用户列表 10篇为一页
@@ -62,6 +62,7 @@ class ArticleController extends Controller
         // 拿回文章的标签和评论总数
         foreach($articles as $item){
             $tag = Tag::where('article_id', $item->id)->get(['tag']);
+            $item->view_count = visits($item)->count();
             // 去除重复标签
             $item->tag = array_values(array_unique(array_column($tag->toArray(), 'tag')));
             $item->commentCount = Comment::where('article_id', $item->id)->count();
@@ -91,8 +92,9 @@ class ArticleController extends Controller
             // 文章标签
             $tag = Tag::where('article_id', $id)->get(['tag']);
             $article->tag = array_column($tag->toArray(), 'tag');
+            $article->comment = Comment::where('article_id', $id)->count();
         } else {
-            return $this->failed('该文章已经下架');
+            return $this->message('该文章已经下架');
         }
         return $this->success($article);   
     }
@@ -107,7 +109,7 @@ class ArticleController extends Controller
             $this->editTag($request->id, $request->tags, $request->classify);
         }
 
-        return $this->success('文章修改成功！');
+        return $this->message('文章修改成功！');
     }
 
     // 修改标签
@@ -140,13 +142,13 @@ class ArticleController extends Controller
     // 下架文章
     public function delete(ArticleRequest $request){
         Article::findOrFail($request->id)->delete();
-        return $this->success('文章下架成功');
+        return $this->message('文章下架成功');
     }
 
     // 恢复下架文章
     public function restored(ArticleRequest $request){
         Article::withTrashed()->findOrFail($request->id)->restore();
-        return $this->success('文章恢复成功');
+        return $this->message('文章恢复成功');
     }
 
     // 真删除文章
@@ -162,7 +164,7 @@ class ArticleController extends Controller
         $article = Article::find($request->id);
         $article->like +=1;
         $article->save();
-        return $this->success('点赞成功！');
+        return $this->message('点赞成功！');
     }
 
     // 获取文章所有分类及分类下的标签

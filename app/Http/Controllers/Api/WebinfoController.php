@@ -14,7 +14,7 @@ class WebinfoController extends Controller
             $webinfo->update($request->all());
         else
             Webinfo::create($request->all());
-        return $this->success('修改成功');
+        return $this->message('设置成功！');
     }
 
     // 获取信息

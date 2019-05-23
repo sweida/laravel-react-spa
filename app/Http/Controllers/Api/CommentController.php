@@ -17,7 +17,7 @@ class CommentController extends Controller
         $array['user_id'] = $user['id'];
 
         Comment::create($array);
-        return $this->success('添加成功');
+        return $this->message('评论成功！');
     }
 
     public function common(Request $request, $text){
@@ -38,7 +38,7 @@ class CommentController extends Controller
 
         $comment->content = $request->get('content');
         return $comment->save() ? 
-            $this->success('评论修改成功') :
+            $this->message('评论修改成功') :
             $this->failed('评论修改失败');
     }
 
@@ -51,7 +51,7 @@ class CommentController extends Controller
             return $this->failed('你没有权限删除');
 
         return $comment->delete() ?
-            $this->success('评论删除成功') :
+            $this->message('评论删除成功') :
             $this->failed('评论删除失败');
     }
 
@@ -81,7 +81,10 @@ class CommentController extends Controller
     public function person(){
         $user = Auth::guard('api')->user();
 
-        $comments = Comment::where('user_id', $user['id'])
+        $comments = Comment::with(['article'=>function($query){
+                    $query->select('id', 'title');
+                }])
+            ->where('user_id', $user['id'])
             ->orderBy('created_at', 'desc')
             ->paginate(10);
         return $this->success($comments);

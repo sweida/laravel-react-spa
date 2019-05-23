@@ -34,7 +34,7 @@ class CommonController extends Controller
         $this->update_robot_time($user->id);
 
         Mail::to($user)->send(new NewUser($user));
-        return $this->success('邮件发送成功');
+        return $this->message('邮件发送成功');
     }
 
     // 校验验证码,设置新密码
@@ -53,7 +53,7 @@ class CommonController extends Controller
 
         $user->update(['password' => $request->password]);
         Redis::del('captcha:'.$user['id']);
-        return $this->success('新密码设置成功');
+        return $this->message('新密码设置成功');
     }
 
     // 检查是否机器人

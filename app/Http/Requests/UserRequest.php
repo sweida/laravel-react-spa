@@ -26,8 +26,8 @@ class UserRequest extends FormRequest
                 ];
             case '/api/v1/user/resetpassword':
                 return [
-                    'oldpassword' => ['required', 'between:6,20'],
-                    'password' => ['required', 'between:6,20'],
+                    'old_password' => ['required', 'between:6,20'],
+                    'new_password' => ['required', 'between:6,20'],
                 ];
             default:
                 return [
@@ -48,9 +48,11 @@ class UserRequest extends FormRequest
             'email.unique' => '邮箱已经存在',
             'phone.unique' => '手机号已存在',
             'password.required' => '密码不能为空',
-            'oldpassword.required' => '旧密码不能为空',
             'password.between' => '密码长度为6~20位之间',
-            'oldpassword.between' => '密码长度为6~20位之间',
+            'old_password.required' => '旧密码不能为空',
+            'old_password.between' => '密码长度为6~20位之间',
+            'new_password.required' => '新密码不能为空',
+            'new_password.between' => '密码长度为6~20位之间',
             // 'password.max' => '密码长度不能超过32个字符',
             // 'password.min' => '密码长度不能少于6个字符', 
             'id.required'=>'id必须填写',

@@ -11,14 +11,14 @@ class LinkController extends Controller
     // 添加链接
     public function add(LinkRequest $request){
         Link::create($request->all());
-        return $this->success('添加成功');
+        return $this->message('添加成功');
     }
 
     // 修改链接
     public function edit(LinkRequest $request){
         $link = Link::findOrFail($request->id);
         $link->update($request->all());
-        return $this->success('修改成功！');
+        return $this->message('修改成功！');
     }
 
     // 删除链接
@@ -26,8 +26,8 @@ class LinkController extends Controller
         $link = Link::find($request->id);
 
         return $link->delete() ?
-            $this->success('删除成功') :
-            $this->failed('删除失败');
+            $this->message('删除成功') :
+            $this->message('删除失败');
     }
 
     // 获取所有链接 分页

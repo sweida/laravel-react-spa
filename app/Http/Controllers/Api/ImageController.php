@@ -19,7 +19,7 @@ class ImageController extends Controller
     public function delete(ImageRequest $request){
         $status = Storage::disk('upyun')->delete($request->image);
         if($status){
-            return $this->success('图片删除成功！');
+            return $this->message('图片删除成功！');
         }
         return $this->failed('图片删除失败！');
     }
