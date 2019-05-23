@@ -27,7 +27,7 @@ class LinkController extends Controller
 
         return $link->delete() ?
             $this->message('删除成功') :
-            $this->message('删除失败');
+            $this->failed('删除失败');
     }
 
     // 获取所有链接 分页

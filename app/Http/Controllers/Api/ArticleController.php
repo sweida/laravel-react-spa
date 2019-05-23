@@ -32,7 +32,7 @@ class ArticleController extends Controller
         return $this->message('文章添加成功！');
     }
 
-    //返回用户列表 10篇为一页
+    //返回文章列表 10篇为一页
     public function list(Request $request){
         // 需要显示的字段
         $data = ['id', 'title', 'img', 'classify', 'clicks', 'like', 'created_at'];
@@ -41,22 +41,7 @@ class ArticleController extends Controller
             $articles = Article::withTrashed()->paginate(10, $data);
         else if ($request->classify)
             $articles = Article::whereClassify($request->classify)->paginate(10, $data);
-        else if ($request->tag) {
-            $articles = Tag::with(['article'=>function($query){
-                    $query->select('id', 'title', 'img', 'clicks', 'like', 'created_at', 'classify');
-                 }])
-                ->where('tag', $request->tag)
-                ->orderBy('article_id', 'desc')
-                ->paginate(10, 'article_id');
-            // 返回没有删除的文章
-            $articles = $articles->where('article','!=', null);
-
-            if (!$articles->first())
-                return $this->message('该标签找不到文章');
-
-            foreach($articles as $item)
-                $item->id = $item->article_id;
-        } else
+        else
             $articles = Article::paginate(10, $data);
 
         // 拿回文章的标签和评论总数
@@ -73,7 +58,7 @@ class ArticleController extends Controller
     //  查看文章详情
     public function detail(ArticleRequest $request){
         $id = $request->get('id');
-        if ($request->all)
+        if ($request->get('all'))
             // 包括下架文章
             $article = Article::withTrashed()->find($id);
         else
@@ -94,7 +79,7 @@ class ArticleController extends Controller
             $article->tag = array_column($tag->toArray(), 'tag');
             $article->comment = Comment::where('article_id', $id)->count();
         } else {
-            return $this->message('该文章已经下架');
+            return $this->failed('该文章已经下架');
         }
         return $this->success($article);   
     }
@@ -141,6 +126,7 @@ class ArticleController extends Controller
 
     // 下架文章
     public function delete(ArticleRequest $request){
+        Tag::where('article_id', $request->id)->delete();
         Article::findOrFail($request->id)->delete();
         return $this->message('文章下架成功');
     }
@@ -148,12 +134,13 @@ class ArticleController extends Controller
     // 恢复下架文章
     public function restored(ArticleRequest $request){
         Article::withTrashed()->findOrFail($request->id)->restore();
+        Tag::withTrashed()->where('article_id', $request->id)->restore();
         return $this->message('文章恢复成功');
     }
 
     // 真删除文章
     public function reallyDelete(ArticleRequest $request){
-        Tag::where('article_id', $request->id)->delete();
+        Tag::where('article_id', $request->id)->forceDelete();
         Comment::where('article_id', $request->id)->delete();
         Article::findOrFail($request->id)->forceDelete();
         return $this->success('文章删除成功');
@@ -176,7 +163,8 @@ class ArticleController extends Controller
             $tag = Tag::where('classify', $classifys[$i])->get(['tag']);
             
             $newArray[$i]['name'] = $classifys[$i];
-            $newArray[$i]['tags'] = array_column($tag->toArray(), 'tag');
+            // 去重复
+            $newArray[$i]['tags'] = array_unique(array_column($tag->toArray(), 'tag'));
         }
         return $this->success($newArray);
     }

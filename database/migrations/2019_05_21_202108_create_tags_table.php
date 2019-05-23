@@ -17,6 +17,7 @@ class CreateTagsTable extends Migration
             $table->string('tag');
             $table->string('classify')->nullable();
             $table->unsignedInteger('article_id');
+            $table->softDeletes();
 
             $table->foreign('article_id')->references('id')->on('articles');
         });

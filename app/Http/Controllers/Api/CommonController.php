@@ -24,12 +24,12 @@ class CommonController extends Controller
         $user = User::whereEmail($request->email)->first();
         
         if ($this->is_robot($user->id, 60))
-            return $this->message('操作太频繁，稍后再试');
+            return $this->failed('操作太频繁，稍后再试');
 
-        // 验证码
+        // 验证码，同时错误次数归0
         $user->captcha = $this->generate_captcha();
-        Redis::set('captcha:'.$user->id, $user->captcha);
-        Redis::set('captchaTime:'.$user->id, time());
+        Redis::setex('captcha:'.$user->id, 300, $user->captcha);
+        Redis::del('checkCount:'.$user['id']);
 
         $this->update_robot_time($user->id);
 
@@ -41,15 +41,19 @@ class CommonController extends Controller
     public function check_captcha(EmailRequest $request){
         $user = User::whereEmail($request->email)->first();
         $RedisCap = Redis::get('captcha:'.$user['id']);
-        $captcha = $request->get('captcha');
+        $checkCount = Redis::get('checkCount:'.$user['id']);
+
 
         if (!$RedisCap) 
-            return $this->message('请先获取验证码');
-        // 验证码是否过期
-        if ($this->isTimeout($user->id))
-            return $this->message('验证码已经过期，请重新获取');
-        if ($captcha != $RedisCap)
-            return $this->message('验证码不正确');
+            return $this->failed('请先获取验证码');
+
+        if ($checkCount > 5)
+            return $this->failed('错误次数太多，请重新获取验证码');
+
+        if ($request->captcha != $RedisCap){
+            Redis::incr('checkCount:'.$user['id']);
+            return $this->failed('验证码不正确');
+        }
 
         $user->update(['password' => $request->password]);
         Redis::del('captcha:'.$user['id']);
@@ -72,12 +76,7 @@ class CommonController extends Controller
         Redis::set('lastActionTime:'.$id, time());
     }
     
-    // 验证码是否过期
-    public function isTimeout($id, $time=300){
-        $captchaTime = Redis::get('captchaTime:'.$id);
-        $elapsed = time() - $captchaTime;
-        return ($elapsed > $time);
-    }
+
 
 }
 

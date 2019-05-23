@@ -42,7 +42,7 @@ class AdController extends Controller
         else if ($id)
             $ads = Ad::find($id);
         else
-            return $this->message('缺少参数type或者id');
+            return $this->failed('缺少参数type或者id');
 
         return $this->success($ads);
     }

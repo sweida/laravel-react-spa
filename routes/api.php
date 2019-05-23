@@ -44,6 +44,7 @@ Route::namespace('Api')->prefix('v1')->group(function () {
 
     // 添加文章模块
     Route::post('/article/list', 'ArticleController@list')->name('article.list');
+    Route::post('/tag/list', 'TagController@orderbytag')->name('tag.list');
     Route::get('/article/classify', 'ArticleController@classify')->name('article.classify');
     Route::post('/article/like', 'ArticleController@like')->name('article.like');
     Route::post('/article','ArticleController@detail')->name('article.detail');

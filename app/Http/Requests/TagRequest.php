@@ -2,29 +2,22 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
 
 class TagRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
-    public function authorize()
-    {
-        return false;
-    }
-
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
-     */
     public function rules()
     {
         return [
-            //
+            'tag' => ['required', 'exists:tags,tag']
+        ];
+
+    }
+
+    public function messages()
+    {
+        return [
+            'tag.required'=>'标签名不能为空',
+            'tag.exists' => '标签名不存在',
         ];
     }
 }

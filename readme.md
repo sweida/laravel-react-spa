@@ -170,7 +170,13 @@ factory(User::class, 20)->create();
 ```
 
 
+### redis启动
+```
+cd /usr/local/etc
+redis-server & ./redis.conf
 
+redis-cli
+```
 
 跨域medz/cors
 pdf功能

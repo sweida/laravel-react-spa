@@ -63,7 +63,7 @@ class UserController extends Controller
         $oldpassword = $request->get('old_password');
 
         if (!Hash::check($oldpassword, $user->password))
-            return $this->message('旧密码错误');
+            return $this->failed('旧密码错误');
 
         $user->update(['password' => $request->new_password]);
         return $this->message('密码修改成功');
