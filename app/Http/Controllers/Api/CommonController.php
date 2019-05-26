@@ -24,7 +24,7 @@ class CommonController extends Controller
         $user = User::whereEmail($request->email)->first();
         
         if ($this->is_robot($user->id, 60))
-            return $this->failed('操作太频繁，稍后再试');
+            return $this->failed('操作太频繁，稍后再试', 200);
 
         // 验证码，同时错误次数归0
         $user->captcha = $this->generate_captcha();
@@ -45,14 +45,14 @@ class CommonController extends Controller
 
 
         if (!$RedisCap) 
-            return $this->failed('请先获取验证码');
+            return $this->failed('请先获取验证码', 200);
 
         if ($checkCount > 5)
-            return $this->failed('错误次数太多，请重新获取验证码');
+            return $this->failed('错误次数太多，请重新获取验证码', 200);
 
         if ($request->captcha != $RedisCap){
             Redis::incr('checkCount:'.$user['id']);
-            return $this->failed('验证码不正确');
+            return $this->failed('验证码不正确', 200);
         }
 
         $user->update(['password' => $request->password]);

@@ -40,7 +40,7 @@ class MessageController extends Controller
         $user = Auth::guard('api')->user();
 
         if (!$message['user_id'] || ($user['id'] != $message['user_id']))
-            return $this->failed('你没有权限删除');
+            return $this->failed('你没有权限删除', 200);
 
         return $message->delete() ?
             $this->message('留言删除成功') :

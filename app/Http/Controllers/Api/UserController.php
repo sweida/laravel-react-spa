@@ -25,11 +25,9 @@ class UserController extends Controller
         $token=Auth::guard('api')->attempt(
             ['name'=>$request->name,'password'=>$request->password]
         );
-        $user = Auth::guard('api')->user();
-        if($token){
-            return $this->success(['token' => 'bearer ' . $token, 'user_id' => $user->id]);
-        }
-        return $this->failed('密码有误！');
+        if($token)
+            return $this->success(['token' => 'Bearer ' . $token]);
+        return $this->failed('密码有误！', 200);
     }
     
     //用户退出
@@ -41,6 +39,8 @@ class UserController extends Controller
     //返回当前登录用户信息
     public function info(){
         $user = Auth::guard('api')->user();
+        if ($user->is_admin==1)
+            $user->admin = true;
         return $this->success($user);
     }
 
@@ -63,7 +63,7 @@ class UserController extends Controller
         $oldpassword = $request->get('old_password');
 
         if (!Hash::check($oldpassword, $user->password))
-            return $this->failed('旧密码错误');
+            return $this->failed('旧密码错误', 200);
 
         $user->update(['password' => $request->new_password]);
         return $this->message('密码修改成功');
