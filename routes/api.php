@@ -18,6 +18,11 @@ use Illuminate\Http\Request;
 // });
 
 
+// 版本号
+Route::get('/version', function() {
+    return ["name" => "laravel-blog-api", "author" => "sweida", "version" => "v2"];
+});
+
 Route::namespace('Api')->prefix('v2')->group(function () {
     Route::post('/signup','UserController@signup')->name('users.signup');
     Route::post('/login','UserController@login')->name('users.login');

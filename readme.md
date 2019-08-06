@@ -63,6 +63,9 @@ composer require laravel/horizon
 php artisan vendor:publish --provider="Laravel\Horizon\HorizonServiceProvider"
 
 php artisan horizon 即可启动所有的队列
+
+# 访问地址
+http://localhost:8080/horizon/dashboard
 ```
 
 ### 安装邮件模版
