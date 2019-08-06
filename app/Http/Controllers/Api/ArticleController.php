@@ -37,12 +37,13 @@ class ArticleController extends Controller
         // 需要显示的字段
         $data = ['id', 'title', 'img', 'classify', 'clicks', 'like', 'created_at'];
 
+        // 获取所有，包括软删除
         if($request->all)
-            $articles = Article::withTrashed()->paginate(10, $data);
+            $articles = Article::withTrashed()->orderBy('created_at', 'desc')->paginate(10, $data);
         else if ($request->classify)
-            $articles = Article::whereClassify($request->classify)->paginate(10, $data);
+            $articles = Article::whereClassify($request->classify)->orderBy('created_at', 'desc')->paginate(10, $data);
         else
-            $articles = Article::paginate(10, $data);
+            $articles = Article::orderBy('created_at', 'desc')->paginate(10, $data);
 
         // 拿回文章的标签和评论总数
         foreach($articles as $item){

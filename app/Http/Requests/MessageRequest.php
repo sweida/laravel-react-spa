@@ -10,12 +10,12 @@ class MessageRequest extends FormRequest
     {
 
         switch (FormRequest::getPathInfo()){
-            case '/api/v1/message/add':
+            case '/api/v2/message/add':
                 return [
                     'content' => ['required'],
                     'reply_id' => ['exists:messages,id'],
                 ];
-            case '/api/v1/message/edit':
+            case '/api/v2/message/edit':
                 return [
                     'id' => ['required', 'exists:messages,id'],
                     'content' => ['required'],

@@ -18,7 +18,7 @@ use Illuminate\Http\Request;
 // });
 
 
-Route::namespace('Api')->prefix('v1')->group(function () {
+Route::namespace('Api')->prefix('v2')->group(function () {
     Route::post('/signup','UserController@signup')->name('users.signup');
     Route::post('/login','UserController@login')->name('users.login');
     // 管理员登录
