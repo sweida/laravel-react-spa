@@ -28,14 +28,14 @@ Route::namespace('Api')->prefix('v2')->group(function () {
     Route::post('/login','UserController@login')->name('users.login');
     // 管理员登录
     Route::middleware('adminLogin')->group(function () {
-        Route::post('/adminlogin', 'UserController@login')->name('users.adminlogin');
+        Route::post('/admin/login', 'UserController@login')->name('users.adminlogin');
+        Route::post('/user/list','UserController@list')->name('users.list');
     });
     //当前用户信息
     Route::middleware('api.refresh')->group(function () {
         Route::post('/logout', 'UserController@logout')->name('users.logout');
         Route::get('/user/info','UserController@info')->name('users.info');
-        Route::get('/user','UserController@show')->name('users.show');
-        Route::get('/user/list','UserController@list')->name('users.list');
+        Route::post('/user','UserController@show')->name('users.show');
         Route::post('/user/resetpassword','UserController@resetpassword')->name('users.resetpassword');
     });
     Route::post('/user/send_email','CommonController@send_email')->name('users.send_email');
@@ -43,7 +43,7 @@ Route::namespace('Api')->prefix('v2')->group(function () {
 
     // 图片上传又拍云
     Route::middleware(['api.refresh', 'adminRole'])->group(function () {
-        Route::post('/image/uplod', 'ImageController@uplod')->name('image.uplod');
+        Route::post('/image/upload', 'ImageController@upload')->name('image.upload');
         Route::post('/image/delete', 'ImageController@delete')->name('image.delete');
     });
 
@@ -63,7 +63,7 @@ Route::namespace('Api')->prefix('v2')->group(function () {
 
     // 评论模块
     Route::post('/comment/add', 'CommentController@add')->name('comment.add');
-    Route::get('/comment/list', 'CommentController@list')->name('comment.list');
+    Route::post('/comment/list', 'CommentController@list')->name('comment.list');
     Route::post('/comment/read','CommentController@read')->name('comment.read');
     Route::middleware('api.refresh')->group(function () {
         Route::post('/comment/edit', 'CommentController@edit')->name('comment.edit');
@@ -71,7 +71,9 @@ Route::namespace('Api')->prefix('v2')->group(function () {
         // 获取个人的所有评论
         Route::get('/comment/person','CommentController@person')->name('comment.person');
     });
-
+    Route::middleware('adminLogin')->group(function () {
+        Route::post('/comment/deletes','CommentController@deletes')->name('comment.deletes');
+    });
     // 留言模块
     Route::post('/message/add', 'MessageController@add')->name('message.add');
     Route::post('/message/list', 'MessageController@list')->name('message.list');
@@ -81,9 +83,12 @@ Route::namespace('Api')->prefix('v2')->group(function () {
         // 个人留言
         Route::get('/message/person','messageController@person')->name('message.person');
     });
+    Route::middleware('adminLogin')->group(function () {
+        Route::post('/message/deletes','MessageController@deletes')->name('message.deletes');
+    });
 
     // 友情链接模块
-    Route::get('/link/list', 'LinkController@list')->name('link.list');
+    Route::post('/link/list', 'LinkController@list')->name('link.list');
     Route::middleware(['api.refresh', 'adminRole'])->group(function () {
         Route::post('/link/add', 'LinkController@add')->name('link.add');
         Route::post('/link/edit', 'LinkController@edit')->name('link.edit');
@@ -91,7 +96,7 @@ Route::namespace('Api')->prefix('v2')->group(function () {
     });
 
     // 图片广告模块
-    Route::get('/ad/list', 'AdController@list')->name('ad.list');
+    Route::post('/ad/list', 'AdController@list')->name('ad.list');
     Route::post('/ad', 'AdController@show')->name('ad.show');
     Route::middleware(['api.refresh', 'adminRole'])->group(function () {
         Route::post('/ad/add', 'AdController@add')->name('ad.add');

@@ -19,7 +19,7 @@ class UserRequest extends FormRequest
                     'name' => ['required', 'max:16', 'exists:users,name'],
                     'password' => ['required', 'between:6,20'],
                 ];
-            case '/api/v2/adminlogin':
+            case '/api/v2/admin/login':
                 return [
                     'name' => ['required', 'max:16', 'exists:users,name'],
                     'password' => ['required', 'between:6,20'],

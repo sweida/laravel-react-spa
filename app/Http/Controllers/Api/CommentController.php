@@ -55,11 +55,24 @@ class CommentController extends Controller
             $this->failed('评论删除失败');
     }
 
+    // 批量删除
+    public function deletes(Request $request){
+        $ids = $request->toArray();
+        if (count($ids)==0){
+            return $this->failed('删除id不能为空', 200);
+        } 
+        Comment::destroy($ids);
+        return $this->message('评论删除成功');
+    }
+
     // 获取所有评论 分页
     public function list(){
         $comments = Comment::with(['user'=>function($query){
                 $query->select('id','name');
                 }])
+            ->with(['article'=>function($query){
+                $query->select('id','title');
+            }])
             ->orderBy('created_at', 'desc')
             ->paginate(10);
         return $this->success($comments);

@@ -36,7 +36,7 @@ class MessageController extends Controller
 
     // 删除留言
     public function delete(MessageRequest $request){
-        $message = message::find($request->id);
+        $message = Message::find($request->id);
         $user = Auth::guard('api')->user();
 
         if (!$message['user_id'] || ($user['id'] != $message['user_id']))
@@ -45,6 +45,16 @@ class MessageController extends Controller
         return $message->delete() ?
             $this->message('留言删除成功') :
             $this->failed('留言删除失败');
+    }
+
+    // 批量删除
+    public function deletes(Request $request){
+        $ids = $request->toArray();
+        if (count($ids)==0){
+            return $this->failed('删除id不能为空', 200);
+        } 
+        Message::destroy($ids);
+        return $this->message('留言删除成功');
     }
 
     // 获取所有留言 分页

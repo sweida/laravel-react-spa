@@ -20,7 +20,7 @@ class MessageRequest extends FormRequest
                     'id' => ['required', 'exists:messages,id'],
                     'content' => ['required'],
                 ];
-            default:
+            case '/api/v2/message/delete':
                 return [
                     'id' => ['required', 'exists:messages,id']
                 ];

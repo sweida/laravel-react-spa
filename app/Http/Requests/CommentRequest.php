@@ -23,7 +23,7 @@ class CommentRequest extends FormRequest
                 return [
                     'article_id' => ['required', 'exists:articles,id,deleted_at,NULL'],
                 ];
-            default:
+            case '/api/v2/comment/delete':
                 return [
                     'id' => ['required', 'exists:comments,id']
                 ];

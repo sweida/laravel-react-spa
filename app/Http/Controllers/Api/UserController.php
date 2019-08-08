@@ -26,6 +26,9 @@ class UserController extends Controller
             ['name'=>$request->name,'password'=>$request->password]
         );
         if($token)
+            $user = Auth::guard('api')->user();
+            $user->updated_at = time();
+            $user->update();
             return $this->success(['token' => 'Bearer ' . $token]);
         return $this->failed('密码有误！', 200);
     }
@@ -50,9 +53,14 @@ class UserController extends Controller
         return $this->success($user);
     }
 
-    //返回用户列表 3个用户为一页
+    //返回用户列表 10个用户为一页
     public function list(){
         $users = User::paginate(10);
+        foreach($users as $item) {
+            if ($item->is_admin) {
+                $item->admin = true;
+            }
+        }
         // return UserResource::collection($users);
         return $this->success($users);
     }

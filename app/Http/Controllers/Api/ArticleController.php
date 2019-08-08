@@ -35,7 +35,7 @@ class ArticleController extends Controller
     //返回文章列表 10篇为一页
     public function list(Request $request){
         // 需要显示的字段
-        $data = ['id', 'title', 'img', 'classify', 'clicks', 'like', 'created_at'];
+        $data = ['id', 'title', 'img', 'classify', 'clicks', 'like', 'created_at', 'deleted_at'];
 
         // 获取所有，包括软删除
         if($request->all)
