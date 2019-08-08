@@ -10,7 +10,7 @@ use App\Http\Requests\ImageRequest;
 class ImageController extends Controller
 {
     // 上传图片
-    public function uplod(ImageRequest $request){
+    public function upload(ImageRequest $request){
         $imageUrl = Storage::disk('upyun')->put('/', $request->file('image'));
         return $this->success(['url'=>$imageUrl]);
     }

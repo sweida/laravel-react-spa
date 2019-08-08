@@ -29,7 +29,6 @@ Route::namespace('Api')->prefix('v2')->group(function () {
     // 管理员登录
     Route::middleware('adminLogin')->group(function () {
         Route::post('/admin/login', 'UserController@login')->name('users.adminlogin');
-        Route::post('/user/list','UserController@list')->name('users.list');
     });
     //当前用户信息
     Route::middleware('api.refresh')->group(function () {
@@ -40,6 +39,10 @@ Route::namespace('Api')->prefix('v2')->group(function () {
     });
     Route::post('/user/send_email','CommonController@send_email')->name('users.send_email');
     Route::post('/user/check_captcha','CommonController@check_captcha')->name('users.check_captcha');
+    
+    Route::middleware(['api.refresh', 'adminRole'])->group(function () {
+        Route::post('/user/list','UserController@list')->name('users.list');
+    });
 
     // 图片上传又拍云
     Route::middleware(['api.refresh', 'adminRole'])->group(function () {
